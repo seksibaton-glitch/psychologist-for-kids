@@ -1,88 +1,1282 @@
-<!-- ШАГ 1: Скопируй весь этот код -->
 <!DOCTYPE html>
 <html lang="ru">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Карманный психолог для детей</title>
+    <title>MindPal - Искусственный интеллект для психологической поддержки детей</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            font-family: 'Arial', sans-serif;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
         }
-        
+
+        :root {
+            --primary: #6366f1;
+            --primary-dark: #4f46e5;
+            --secondary: #06b6d4;
+            --accent: #f59e0b;
+            --success: #10b981;
+            --danger: #ef4444;
+            --warning: #f59e0b;
+            --light: #f8fafc;
+            --dark: #1e293b;
+            --gray: #64748b;
+            --bg-gradient: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            --card-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+            --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
         body {
-            background: linear-gradient(135deg, #a1c4fd 0%, #c2e9fb 100%);
+            background: var(--bg-gradient);
             min-height: 100vh;
-            display: flex;
-            justify-content: center;
-            align-items: center;
+            color: var(--dark);
+            overflow-x: hidden;
+        }
+
+        .app-container {
+            max-width: 1200px;
+            margin: 0 auto;
             padding: 20px;
+            display: grid;
+            grid-template-columns: 280px 1fr;
+            gap: 20px;
+            height: 100vh;
         }
-        
-        .container {
-            background: white;
+
+        /* Sidebar Styles */
+        .sidebar {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
             border-radius: 20px;
-            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1);
-            padding: 40px;
-            max-width: 500px;
-            width: 100%;
-            text-align: center;
+            padding: 25px;
+            box-shadow: var(--card-shadow);
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
         }
-        
-        .robot-icon {
-            font-size: 4rem;
-            margin-bottom: 20px;
-            animation: bounce 2s infinite;
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 2px solid var(--light);
         }
-        
-        @keyframes bounce {
-            0%, 100% { transform: translateY(0); }
-            50% { transform: translateY(-10px); }
+
+        .logo-icon {
+            width: 40px;
+            height: 40px;
+            background: var(--primary);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 1.2rem;
         }
-        
-        h1 {
-            color: #4facfe;
-            margin-bottom: 15px;
-            font-size: 2.2rem;
+
+        .logo-text {
+            font-size: 1.5rem;
+            font-weight: 700;
+            background: linear-gradient(90deg, var(--primary), var(--secondary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
         }
-        
-        p {
-            color: #666;
-            line-height: 1.6;
+
+        .user-profile {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 25px;
+            padding: 15px;
+            background: var(--light);
+            border-radius: 15px;
+        }
+
+        .user-avatar {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: 600;
+            font-size: 1.2rem;
+        }
+
+        .user-info h3 {
+            font-size: 1.1rem;
+            margin-bottom: 5px;
+        }
+
+        .user-info p {
+            font-size: 0.85rem;
+            color: var(--gray);
+        }
+
+        .nav-section {
             margin-bottom: 25px;
         }
-        
-        .btn {
-            background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+
+        .section-title {
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            color: var(--gray);
+            margin-bottom: 15px;
+            font-weight: 600;
+            letter-spacing: 0.5px;
+        }
+
+        .nav-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 12px 15px;
+            border-radius: 12px;
+            margin-bottom: 8px;
+            cursor: pointer;
+            transition: var(--transition);
+            color: var(--dark);
+            text-decoration: none;
+        }
+
+        .nav-item:hover {
+            background: var(--light);
+        }
+
+        .nav-item.active {
+            background: var(--primary);
+            color: white;
+        }
+
+        .nav-item i {
+            width: 20px;
+            text-align: center;
+        }
+
+        .mood-tracker {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            border-radius: 15px;
+            padding: 20px;
+            color: white;
+            margin-top: auto;
+        }
+
+        .mood-tracker h3 {
+            font-size: 1rem;
+            margin-bottom: 15px;
+        }
+
+        .mood-options {
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .mood-option {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            cursor: pointer;
+            transition: var(--transition);
+            padding: 5px;
+            border-radius: 10px;
+        }
+
+        .mood-option:hover {
+            background: rgba(255, 255, 255, 0.2);
+        }
+
+        .mood-emoji {
+            font-size: 1.5rem;
+            margin-bottom: 5px;
+        }
+
+        .mood-name {
+            font-size: 0.7rem;
+        }
+
+        /* Main Content Styles */
+        .main-content {
+            display: grid;
+            grid-template-rows: auto 1fr auto;
+            gap: 20px;
+        }
+
+        .header {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 20px 25px;
+            box-shadow: var(--card-shadow);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .header h1 {
+            font-size: 1.8rem;
+            background: linear-gradient(90deg, var(--primary), var(--secondary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .header-actions {
+            display: flex;
+            gap: 15px;
+        }
+
+        .header-btn {
+            width: 45px;
+            height: 45px;
+            border-radius: 12px;
+            background: var(--light);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: var(--transition);
+            color: var(--dark);
+        }
+
+        .header-btn:hover {
+            background: var(--primary);
+            color: white;
+        }
+
+        .chat-container {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            box-shadow: var(--card-shadow);
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
+
+        .chat-header {
+            padding: 20px 25px;
+            border-bottom: 1px solid var(--light);
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .ai-avatar {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 1.5rem;
+        }
+
+        .ai-info h3 {
+            font-size: 1.2rem;
+            margin-bottom: 5px;
+        }
+
+        .ai-info p {
+            font-size: 0.9rem;
+            color: var(--gray);
+        }
+
+        .chat-messages {
+            flex: 1;
+            padding: 25px;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .message {
+            max-width: 80%;
+            padding: 15px 20px;
+            border-radius: 18px;
+            line-height: 1.5;
+            position: relative;
+            animation: fadeIn 0.4s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .bot-message {
+            align-self: flex-start;
+            background: var(--light);
+            border-bottom-left-radius: 5px;
+        }
+
+        .user-message {
+            align-self: flex-end;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+            border-bottom-right-radius: 5px;
+        }
+
+        .message-time {
+            font-size: 0.75rem;
+            opacity: 0.7;
+            margin-top: 8px;
+        }
+
+        .quick-actions {
+            display: flex;
+            gap: 10px;
+            padding: 0 25px 15px;
+            flex-wrap: wrap;
+        }
+
+        .quick-btn {
+            background: white;
+            border: 1px solid var(--primary);
+            border-radius: 20px;
+            padding: 10px 18px;
+            font-size: 0.9rem;
+            cursor: pointer;
+            transition: var(--transition);
+            color: var(--primary);
+        }
+
+        .quick-btn:hover {
+            background: var(--primary);
+            color: white;
+        }
+
+        .chat-input-container {
+            padding: 20px 25px;
+            border-top: 1px solid var(--light);
+            display: flex;
+            gap: 15px;
+            align-items: flex-end;
+        }
+
+        .chat-input {
+            flex: 1;
+            padding: 15px 20px;
+            border: 2px solid var(--light);
+            border-radius: 15px;
+            outline: none;
+            font-size: 1rem;
+            resize: none;
+            transition: var(--transition);
+            min-height: 50px;
+            max-height: 120px;
+        }
+
+        .chat-input:focus {
+            border-color: var(--primary);
+        }
+
+        .send-btn {
+            width: 50px;
+            height: 50px;
+            border-radius: 15px;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
             color: white;
             border: none;
-            padding: 15px 30px;
-            border-radius: 25px;
-            font-size: 1.1rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
             cursor: pointer;
-            transition: transform 0.3s ease;
+            transition: var(--transition);
+            font-size: 1.2rem;
         }
-        
-        .btn:hover {
+
+        .send-btn:hover {
             transform: scale(1.05);
+        }
+
+        /* Dashboard Styles */
+        .dashboard {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 20px;
+        }
+
+        .card {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 25px;
+            box-shadow: var(--card-shadow);
+        }
+
+        .card-header {
+            display: flex;
+            justify-content: between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .card-title {
+            font-size: 1.2rem;
+            font-weight: 600;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
+        }
+
+        .stat-card {
+            background: var(--light);
+            border-radius: 15px;
+            padding: 20px;
+            text-align: center;
+        }
+
+        .stat-value {
+            font-size: 2rem;
+            font-weight: 700;
+            margin-bottom: 5px;
+            background: linear-gradient(90deg, var(--primary), var(--secondary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .stat-label {
+            font-size: 0.9rem;
+            color: var(--gray);
+        }
+
+        .progress-container {
+            margin-bottom: 20px;
+        }
+
+        .progress-label {
+            display: flex;
+            justify-content: between;
+            margin-bottom: 8px;
+        }
+
+        .progress-bar {
+            height: 8px;
+            background: var(--light);
+            border-radius: 4px;
+            overflow: hidden;
+        }
+
+        .progress {
+            height: 100%;
+            background: linear-gradient(90deg, var(--primary), var(--secondary));
+            border-radius: 4px;
+            transition: width 0.5s ease;
+        }
+
+        .activities-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
+        }
+
+        .activity-card {
+            background: var(--light);
+            border-radius: 15px;
+            padding: 20px;
+            text-align: center;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .activity-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+        }
+
+        .activity-icon {
+            font-size: 2rem;
+            margin-bottom: 10px;
+            color: var(--primary);
+        }
+
+        /* Meditation Styles */
+        .meditation-player {
+            text-align: center;
+            padding: 30px;
+        }
+
+        .meditation-cover {
+            width: 200px;
+            height: 200px;
+            border-radius: 20px;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            margin: 0 auto 30px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 4rem;
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.2);
+        }
+
+        .meditation-title {
+            font-size: 1.5rem;
+            margin-bottom: 10px;
+        }
+
+        .meditation-duration {
+            color: var(--gray);
+            margin-bottom: 25px;
+        }
+
+        .player-controls {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .control-btn {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            background: var(--light);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: var(--transition);
+            font-size: 1.5rem;
+        }
+
+        .play-btn {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+            width: 70px;
+            height: 70px;
+        }
+
+        .control-btn:hover {
+            transform: scale(1.1);
+        }
+
+        .progress-time {
+            display: flex;
+            justify-content: between;
+            color: var(--gray);
+            font-size: 0.9rem;
+            margin-top: 10px;
+        }
+
+        /* Games Styles */
+        .games-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 20px;
+        }
+
+        .game-card {
+            background: var(--light);
+            border-radius: 15px;
+            overflow: hidden;
+            transition: var(--transition);
+            cursor: pointer;
+        }
+
+        .game-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+        }
+
+        .game-image {
+            height: 120px;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 2.5rem;
+        }
+
+        .game-info {
+            padding: 15px;
+        }
+
+        .game-title {
+            font-size: 1.1rem;
+            margin-bottom: 5px;
+        }
+
+        .game-desc {
+            font-size: 0.85rem;
+            color: var(--gray);
+        }
+
+        /* Responsive Styles */
+        @media (max-width: 1024px) {
+            .app-container {
+                grid-template-columns: 1fr;
+                height: auto;
+            }
+            
+            .sidebar {
+                display: none;
+            }
+            
+            .dashboard {
+                grid-template-columns: 1fr;
+            }
+            
+            .games-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        @media (max-width: 768px) {
+            .app-container {
+                padding: 10px;
+            }
+            
+            .games-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .stats-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .activities-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .message {
+                max-width: 90%;
+            }
+        }
+
+        /* Dark mode support */
+        @media (prefers-color-scheme: dark) {
+            :root {
+                --light: #1e293b;
+                --dark: #f8fafc;
+                --gray: #94a3b8;
+            }
+            
+            body {
+                background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+            }
+            
+            .sidebar, .header, .chat-container, .card {
+                background: rgba(30, 41, 59, 0.95);
+                color: var(--dark);
+            }
+            
+            .quick-btn, .stat-card, .activity-card, .game-card {
+                background: #334155;
+                color: var(--dark);
+            }
         }
     </style>
 </head>
 <body>
-    <div class="container">
-        <div class="robot-icon">🤖</div>
-        <h1>Карманный психолог</h1>
-        <p>Добрый помощник для детей, который всегда готов выслушать и помочь справиться с любыми трудностями</p>
-        <button class="btn">Начать общение</button>
+    <div class="app-container">
+        <!-- Sidebar -->
+        <div class="sidebar">
+            <div class="logo">
+                <div class="logo-icon">
+                    <i class="fas fa-brain"></i>
+                </div>
+                <div class="logo-text">MindPal</div>
+            </div>
+            
+            <div class="user-profile">
+                <div class="user-avatar" id="userAvatar">U</div>
+                <div class="user-info">
+                    <h3 id="userName">Пользователь</h3>
+                    <p>Уровень: <span id="userLevel">5</span></p>
+                </div>
+            </div>
+            
+            <div class="nav-section">
+                <div class="section-title">Основное</div>
+                <div class="nav-item active" data-tab="chat">
+                    <i class="fas fa-comment-dots"></i>
+                    <span>Чат с AI</span>
+                </div>
+                <div class="nav-item" data-tab="dashboard">
+                    <i class="fas fa-chart-line"></i>
+                    <span>Дашборд</span>
+                </div>
+                <div class="nav-item" data-tab="meditation">
+                    <i class="fas fa-spa"></i>
+                    <span>Медитация</span>
+                </div>
+                <div class="nav-item" data-tab="games">
+                    <i class="fas fa-gamepad"></i>
+                    <span>Игры</span>
+                </div>
+            </div>
+            
+            <div class="nav-section">
+                <div class="section-title">Инструменты</div>
+                <div class="nav-item" data-tab="mood">
+                    <i class="fas fa-smile"></i>
+                    <span>Трекер настроения</span>
+                </div>
+                <div class="nav-item" data-tab="diary">
+                    <i class="fas fa-book"></i>
+                    <span>Дневник</span>
+                </div>
+                <div class="nav-item" data-tab="breathing">
+                    <i class="fas fa-wind"></i>
+                    <span>Дыхание</span>
+                </div>
+                <div class="nav-item" data-tab="resources">
+                    <i class="fas fa-life-ring"></i>
+                    <span>Ресурсы</span>
+                </div>
+            </div>
+            
+            <div class="mood-tracker">
+                <h3>Как ты себя чувствуешь?</h3>
+                <div class="mood-options">
+                    <div class="mood-option" data-mood="happy">
+                        <div class="mood-emoji">😊</div>
+                        <div class="mood-name">Счастлив</div>
+                    </div>
+                    <div class="mood-option" data-mood="calm">
+                        <div class="mood-emoji">😌</div>
+                        <div class="mood-name">Спокоен</div>
+                    </div>
+                    <div class="mood-option" data-mood="sad">
+                        <div class="mood-emoji">😢</div>
+                        <div class="mood-name">Грустен</div>
+                    </div>
+                    <div class="mood-option" data-mood="anxious">
+                        <div class="mood-emoji">😰</div>
+                        <div class="mood-name">Тревожусь</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Main Content -->
+        <div class="main-content">
+            <div class="header">
+                <h1 id="pageTitle">Чат с AI-психологом</h1>
+                <div class="header-actions">
+                    <div class="header-btn" id="settingsBtn">
+                        <i class="fas fa-cog"></i>
+                    </div>
+                    <div class="header-btn" id="notificationsBtn">
+                        <i class="fas fa-bell"></i>
+                    </div>
+                    <div class="header-btn" id="userMenuBtn">
+                        <i class="fas fa-user"></i>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Chat Tab -->
+            <div class="tab-content active" id="chat-tab">
+                <div class="chat-container">
+                    <div class="chat-header">
+                        <div class="ai-avatar">
+                            <i class="fas fa-robot"></i>
+                        </div>
+                        <div class="ai-info">
+                            <h3>AI Психолог</h3>
+                            <p>Online • Специализируется на детской психологии</p>
+                        </div>
+                    </div>
+                    
+                    <div class="chat-messages" id="chatMessages">
+                        <div class="message bot-message">
+                            Привет! Я твой AI-помощник. Я здесь, чтобы поддержать тебя, помочь разобраться в чувствах и найти решения для любых проблем. Расскажи, как твои дела?
+                            <div class="message-time">Сейчас</div>
+                        </div>
+                    </div>
+                    
+                    <div class="quick-actions">
+                        <div class="quick-btn" data-quick="school">Проблемы в школе</div>
+                        <div class="quick-btn" data-quick="friends">Ссора с друзьями</div>
+                        <div class="quick-btn" data-quick="family">Семейные трудности</div>
+                        <div class="quick-btn" data-quick="sadness">Мне грустно</div>
+                        <div class="quick-btn" data-quick="stress">Я в стрессе</div>
+                        <div class="quick-btn" data-quick="sleep">Проблемы со сном</div>
+                    </div>
+                    
+                    <div class="chat-input-container">
+                        <textarea class="chat-input" id="chatInput" placeholder="Напиши сообщение..." rows="1"></textarea>
+                        <button class="send-btn" id="sendBtn">
+                            <i class="fas fa-paper-plane"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Dashboard Tab -->
+            <div class="tab-content" id="dashboard-tab">
+                <div class="dashboard">
+                    <div class="card">
+                        <div class="card-header">
+                            <div class="card-title">Твоя активность</div>
+                        </div>
+                        <div class="stats-grid">
+                            <div class="stat-card">
+                                <div class="stat-value" id="sessionCount">24</div>
+                                <div class="stat-label">Сессии с AI</div>
+                            </div>
+                            <div class="stat-card">
+                                <div class="stat-value" id="moodAvg">7.8</div>
+                                <div class="stat-label">Среднее настроение</div>
+                            </div>
+                            <div class="stat-card">
+                                <div class="stat-value" id="streakDays">12</div>
+                                <div class="stat-label">Дней подряд</div>
+                            </div>
+                            <div class="stat-card">
+                                <div class="stat-value" id="pointsEarned">580</div>
+                                <div class="stat-label">Очков опыта</div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="card">
+                        <div class="card-header">
+                            <div class="card-title">Прогресс настроения</div>
+                        </div>
+                        <div class="progress-container">
+                            <div class="progress-label">
+                                <span>Счастлив</span>
+                                <span>65%</span>
+                            </div>
+                            <div class="progress-bar">
+                                <div class="progress" style="width: 65%"></div>
+                            </div>
+                        </div>
+                        <div class="progress-container">
+                            <div class="progress-label">
+                                <span>Спокоен</span>
+                                <span>45%</span>
+                            </div>
+                            <div class="progress-bar">
+                                <div class="progress" style="width: 45%"></div>
+                            </div>
+                        </div>
+                        <div class="progress-container">
+                            <div class="progress-label">
+                                <span>Грустен</span>
+                                <span>20%</span>
+                            </div>
+                            <div class="progress-bar">
+                                <div class="progress" style="width: 20%"></div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="card">
+                        <div class="card-header">
+                            <div class="card-title">Рекомендации для тебя</div>
+                        </div>
+                        <div class="activities-grid">
+                            <div class="activity-card">
+                                <div class="activity-icon">
+                                    <i class="fas fa-meditation"></i>
+                                </div>
+                                <div class="activity-title">Медитация</div>
+                                <div class="activity-desc">5 минут спокойствия</div>
+                            </div>
+                            <div class="activity-card">
+                                <div class="activity-icon">
+                                    <i class="fas fa-book-open"></i>
+                                </div>
+                                <div class="activity-title">Дневник</div>
+                                <div class="activity-desc">Запиши свои мысли</div>
+                            </div>
+                            <div class="activity-card">
+                                <div class="activity-icon">
+                                    <i class="fas fa-wind"></i>
+                                </div>
+                                <div class="activity-title">Дыхание</div>
+                                <div class="activity-desc">Упражнение 4-7-8</div>
+                            </div>
+                            <div class="activity-card">
+                                <div class="activity-icon">
+                                    <i class="fas fa-gamepad"></i>
+                                </div>
+                                <div class="activity-title">Игра</div>
+                                <div class="activity-desc">Снижение стресса</div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="card">
+                        <div class="card-header">
+                            <div class="card-title">Твои достижения</div>
+                        </div>
+                        <div class="achievements-list">
+                            <div class="achievement">
+                                <div class="achievement-icon">🎯</div>
+                                <div class="achievement-info">
+                                    <div class="achievement-title">Первая сессия</div>
+                                    <div class="achievement-desc">Завершена 5 дней назад</div>
+                                </div>
+                            </div>
+                            <div class="achievement">
+                                <div class="achievement-icon">💪</div>
+                                <div class="achievement-info">
+                                    <div class="achievement-title">Неделя подряд</div>
+                                    <div class="achievement-desc">7 дней активности</div>
+                                </div>
+                            </div>
+                            <div class="achievement">
+                                <div class="achievement-icon">😊</div>
+                                <div class="achievement-info">
+                                    <div class="achievement-title">Позитивное мышление</div>
+                                    <div class="achievement-desc">10+ позитивных записей</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Meditation Tab -->
+            <div class="tab-content" id="meditation-tab">
+                <div class="card">
+                    <div class="meditation-player">
+                        <div class="meditation-cover">
+                            <i class="fas fa-spa"></i>
+                        </div>
+                        <div class="meditation-title">Спокойное дыхание</div>
+                        <div class="meditation-duration">10 минут • Для снижения тревоги</div>
+                        
+                        <div class="player-controls">
+                            <div class="control-btn">
+                                <i class="fas fa-step-backward"></i>
+                            </div>
+                            <div class="control-btn play-btn">
+                                <i class="fas fa-play"></i>
+                            </div>
+                            <div class="control-btn">
+                                <i class="fas fa-step-forward"></i>
+                            </div>
+                        </div>
+                        
+                        <div class="progress-bar">
+                            <div class="progress" style="width: 30%"></div>
+                        </div>
+                        <div class="progress-time">
+                            <span>3:20</span>
+                            <span>10:00</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="card">
+                    <div class="card-header">
+                        <div class="card-title">Рекомендуемые медитации</div>
+                    </div>
+                    <div class="meditation-list">
+                        <div class="meditation-item">
+                            <div class="meditation-icon">🌙</div>
+                            <div class="meditation-info">
+                                <div class="meditation-name">Для сна</div>
+                                <div class="meditation-desc">15 мин • Помогает уснуть</div>
+                            </div>
+                            <div class="meditation-action">
+                                <i class="fas fa-play"></i>
+                            </div>
+                        </div>
+                        <div class="meditation-item">
+                            <div class="meditation-icon">☀️</div>
+                            <div class="meditation-info">
+                                <div class="meditation-name">Утренняя</div>
+                                <div class="meditation-desc">5 мин • Заряд бодрости</div>
+                            </div>
+                            <div class="meditation-action">
+                                <i class="fas fa-play"></i>
+                            </div>
+                        </div>
+                        <div class="meditation-item">
+                            <div class="meditation-icon">📚</div>
+                            <div class="meditation-info">
+                                <div class="meditation-name">Перед учебой</div>
+                                <div class="meditation-desc">7 мин • Для концентрации</div>
+                            </div>
+                            <div class="meditation-action">
+                                <i class="fas fa-play"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Games Tab -->
+            <div class="tab-content" id="games-tab">
+                <div class="games-grid">
+                    <div class="game-card">
+                        <div class="game-image">
+                            <i class="fas fa-cloud"></i>
+                        </div>
+                        <div class="game-info">
+                            <div class="game-title">Дыхание с облаками</div>
+                            <div class="game-desc">Управляй облаками с помощью дыхания</div>
+                        </div>
+                    </div>
+                    <div class="game-card">
+                        <div class="game-image">
+                            <i class="fas fa-puzzle-piece"></i>
+                        </div>
+                        <div class="game-info">
+                            <div class="game-title">Эмоциональные пазлы</div>
+                            <div class="game-desc">Собери пазл, изучая эмоции</div>
+                        </div>
+                    </div>
+                    <div class="game-card">
+                        <div class="game-image">
+                            <i class="fas fa-seedling"></i>
+                        </div>
+                        <div class="game-info">
+                            <div class="game-title">Сад спокойствия</div>
+                            <div class="game-desc">Выращивай растения для релаксации</div>
+                        </div>
+                    </div>
+                    <div class="game-card">
+                        <div class="game-image">
+                            <i class="fas fa-music"></i>
+                        </div>
+                        <div class="game-info">
+                            <div class="game-title">Звуковая терапия</div>
+                            <div class="game-desc">Создай успокаивающую мелодию</div>
+                        </div>
+                    </div>
+                    <div class="game-card">
+                        <div class="game-image">
+                            <i class="fas fa-palette"></i>
+                        </div>
+                        <div class="game-info">
+                            <div class="game-title">Раскраска эмоций</div>
+                            <div class="game-desc">Раскрась свои чувства</div>
+                        </div>
+                    </div>
+                    <div class="game-card">
+                        <div class="game-image">
+                            <i class="fas fa-heart"></i>
+                        </div>
+                        <div class="game-info">
+                            <div class="game-title">Позитивные аффирмации</div>
+                            <div class="game-desc">Создай свои утверждения</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 
     <script>
-        // Твой JavaScript код здесь
-        document.querySelector('.btn').addEventListener('click', function() {
-            alert('Привет! Я твой карманный психолог. Как твои дела?');
+        document.addEventListener('DOMContentLoaded', function() {
+            // Elements
+            const chatMessages = document.getElementById('chatMessages');
+            const chatInput = document.getElementById('chatInput');
+            const sendBtn = document.getElementById('sendBtn');
+            const userAvatar = document.getElementById('userAvatar');
+            const userName = document.getElementById('userName');
+            const userLevel = document.getElementById('userLevel');
+            const navItems = document.querySelectorAll('.nav-item');
+            const tabContents = document.querySelectorAll('.tab-content');
+            const pageTitle = document.getElementById('pageTitle');
+            const quickBtns = document.querySelectorAll('.quick-btn');
+            const moodOptions = document.querySelectorAll('.mood-option');
+            
+            // User data
+            let currentUser = {
+                name: 'Юный друг',
+                level: 5,
+                points: 580,
+                mood: []
+            };
+            
+            // Initialize user
+            userName.textContent = currentUser.name;
+            userAvatar.textContent = currentUser.name.charAt(0);
+            userLevel.textContent = currentUser.level;
+            
+            // Auto-resize textarea
+            chatInput.addEventListener('input', function() {
+                this.style.height = 'auto';
+                this.style.height = (this.scrollHeight) + 'px';
+            });
+            
+            // Navigation
+            navItems.forEach(item => {
+                item.addEventListener('click', function() {
+                    const tabId = this.getAttribute('data-tab');
+                    
+                    // Update active nav item
+                    navItems.forEach(nav => nav.classList.remove('active'));
+                    this.classList.add('active');
+                    
+                    // Show corresponding tab
+                    tabContents.forEach(tab => tab.classList.remove('active'));
+                    document.getElementById(`${tabId}-tab`).classList.add('active');
+                    
+                    // Update page title
+                    const tabTitles = {
+                        'chat': 'Чат с AI-психологом',
+                        'dashboard': 'Твой прогресс',
+                        'meditation': 'Медитация и релаксация',
+                        'games': 'Терапевтические игры',
+                        'mood': 'Трекер настроения',
+                        'diary': 'Личный дневник',
+                        'breathing': 'Дыхательные упражнения',
+                        'resources': 'Полезные ресурсы'
+                    };
+                    pageTitle.textContent = tabTitles[tabId] || 'MindPal';
+                });
+            });
+            
+            // Quick actions
+            quickBtns.forEach(btn => {
+                btn.addEventListener('click', function() {
+                    const action = this.getAttribute('data-quick');
+                    const actionMessages = {
+                        'school': 'У меня проблемы в школе',
+                        'friends': 'Я поссорился с друзьями',
+                        'family': 'У меня трудности в семье',
+                        'sadness': 'Мне очень грустно',
+                        'stress': 'Я чувствую сильный стресс',
+                        'sleep': 'У меня проблемы со сном'
+                    };
+                    
+                    addMessage(actionMessages[action], true);
+                    
+                    setTimeout(() => {
+                        const responses = {
+                            'school': 'Расскажи подробнее о том, что происходит в школе. С уроками, учителями или одноклассниками?',
+                            'friends': 'Ссоры с друзьями могут быть неприятными. Хочешь рассказать, что случилось?',
+                            'family': 'Семейные ситуации бывают сложными. Я готов выслушать тебя и помочь разобраться.',
+                            'sadness': 'Мне жаль, что тебе грустно. Грусть - это нормальная эмоция. Хочешь поделиться, что вызвало эти чувства?',
+                            'stress': 'Стресс может быть overwhelming. Давай вместе найдем способы снизить его. Что именно вызывает у тебя стресс?',
+                            'sleep': 'Проблемы со сном часто связаны с нашими переживаниями. Расскажи, как проходит твой вечер перед сном?'
+                        };
+                        addMessage(responses[action], false);
+                    }, 1000);
+                });
+            });
+            
+            // Mood tracking
+            moodOptions.forEach(option => {
+                option.addEventListener('click', function() {
+                    const mood = this.getAttribute('data-mood');
+                    const moodNames = {
+                        'happy': 'счастлив',
+                        'calm': 'спокоен', 
+                        'sad': 'грустен',
+                        'anxious': 'тревожусь'
+                    };
+                    
+                    // Visual feedback
+                    moodOptions.forEach(opt => opt.style.opacity = '0.6');
+                    this.style.opacity = '1';
+                    this.style.transform = 'scale(1.1)';
+                    
+                    // Add to user data
+                    currentUser.mood.push({
+                        type: mood,
+                        timestamp: new Date()
+                    });
+                    
+                    // Show confirmation
+                    setTimeout(() => {
+                        addMessage(`Спасибо, что поделился настроением! Рад, что ты чувствуешь себя ${moodNames[mood]}.`, false);
+                    }, 500);
+                });
+            });
+            
+            // Send message function
+            function addMessage(text, isUser = false) {
+                const messageDiv = document.createElement('div');
+                messageDiv.classList.add('message');
+                messageDiv.classList.add(isUser ? 'user-message' : 'bot-message');
+                
+                const time = new Date().toLocaleTimeString('ru-RU', {hour: '2-digit', minute:'2-digit'});
+                
+                messageDiv.innerHTML = `
+                    ${text}
+                    <div class="message-time">${time}</div>
+                `;
+                
+                chatMessages.appendChild(messageDiv);
+                chatMessages.scrollTop = chatMessages.scrollHeight;
+                
+                // Add points for user messages
+                if (isUser) {
+                    currentUser.points += 5;
+                    updateUserStats();
+                }
+            }
+            
+            // Update user stats
+            function updateUserStats() {
+                userLevel.textContent = Math.floor(currentUser.points / 100) + 1;
+                
+                // Update dashboard stats
+                document.getElementById('sessionCount').textContent = parseInt(document.getElementById('sessionCount').textContent) + 1;
+                document.getElementById('pointsEarned').textContent = currentUser.points;
+            }
+            
+            // Send button event
+            sendBtn.addEventListener('click', sendMessage);
+            
+            // Enter key event
+            chatInput.addEventListener('keypress', function(e) {
+                if (e.key === 'Enter' && !e.shiftKey) {
+                    e.preventDefault();
+                    sendMessage();
+                }
+            });
+            
+            // Send message function
+            function sendMessage() {
+                const message = chatInput.value.trim();
+                if (message) {
+                    addMessage(message, true);
+                    chatInput.value = '';
+                    chatInput.style.height = 'auto';
+                    
+                    // Simulate AI response
+                    setTimeout(() => {
+                        const responses = [
+                            "Спасибо, что поделился этим со мной. Давай разберемся вместе, что можно сделать в этой ситуации.",
+                            "Понимаю, что это может быть непросто для тебя. Ты уже молодец, что обращаешься за помощью.",
+                            "Иногда просто проговаривание проблемы помогает увидеть ее по-новому. Что ты чувствуешь, когда думаешь об этом?",
+                            "У каждого бывают трудные моменты. Важно помнить, что ты сильнее, чем кажешься. Как думаешь, что могло бы помочь тебе прямо сейчас?",
+                            "Спасибо за доверие. Я здесь, чтобы поддержать тебя. Хочешь, мы попробуем технику, которая может помочь?",
+                            "Твои чувства абсолютно valid. Давай explore эту ситуацию вместе и найдем способы справиться с ней."
+                        ];
+                        
+                        const randomResponse = responses[Math.floor(Math.random() * responses.length)];
+                        addMessage(randomResponse, false);
+                    }, 1000 + Math.random() * 2000);
+                }
+            }
+            
+            // Header buttons functionality
+            document.getElementById('settingsBtn').addEventListener('click', function() {
+                addMessage("Настройки: Здесь ты можешь настроить внешний вид, уведомления и конфиденциальность.", false);
+            });
+            
+            document.getElementById('notificationsBtn').addEventListener('click', function() {
+                addMessage("У тебя 3 новых уведомления: напоминание о медитации, достижение 'Неделя активности' и новый игровой режим.", false);
+            });
+            
+            // Initialize
+            updateUserStats();
         });
     </script>
 </body>
